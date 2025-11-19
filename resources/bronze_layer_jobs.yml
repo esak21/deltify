@@ -1,0 +1,47 @@
+resources:
+  jobs:
+    bronze_layer_load_job:
+      name: deltify_bronze_layer_load_job
+
+      tasks:
+        - task_key : notebook_task
+          job_cluster_key : deltify_job_cluster
+          notebook_task:
+            notebook_path: ../src/deltify/notebook.ipynb
+          libraries:
+            - whl: ../dist/*.whl
+
+
+      queue:
+        enabled: true
+      job_clusters:
+        - job_cluster_key : deltify_job_cluster
+          new_cluster:
+            num_workers: 0
+            spark_version: 14.3.x-scala2.12
+            node_type_id: Standard_DS3_v2
+            spark_conf:
+              "spark.databricks.cluster.profile": "singleNode"
+              "spark.master": "local[*]"
+            custom_tags:
+              ResourceClass: SingleNode
+
+
+
+
+#          python_wheel_task:
+#            # 1. Must match the 'name' in pyproject.toml
+#            package_name: deltify_wheel
+#            # 2. Points to the function: module_name.function_name
+#            entry_point: app:runner
+#
+#            # 4. Libraries required by the task
+#            libraries:
+#              - whl: ${artifacts.deltify_wheel.uri} # This references the wheel artifact built in databricks.yml
+
+
+#
+#          notebook_task:
+#            notebook_path: ../src/deltify/notebook.ipynb
+#          libraries:
+#            - whl: ../dist/*.whl
