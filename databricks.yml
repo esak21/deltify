@@ -1,0 +1,18 @@
+bundle:
+  name: deltify-packages
+
+include:
+  - resources/*.yml
+  - resources/*/*.yml
+
+artifacts:
+  deltify_wheel:
+    type: whl
+    path: .
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://adb-663477288826036.16.azuredatabricks.net
